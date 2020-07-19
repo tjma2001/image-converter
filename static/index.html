@@ -1,0 +1,39 @@
+<html>
+<script>
+  window.onload = () => {
+    document.querySelector('#fileinput').addEventListener('change', event => {
+      handleImageUpload(event)
+    })
+  }
+
+  async function handleImageUpload(event) {
+    const files = event.target.files;
+    const formData = new FormData();
+    formData.append('file', files[0]);
+
+    const url = `${window.location.protocol}image`;
+    try {
+      const result = await fetch(url, {
+        method: 'POST',
+        body: formData
+      })
+
+      const imageSrc = `${window.location.protocol}image/${await result.text()}`;
+
+      document.getElementById('processed-image').src = imageSrc;
+    } catch (error) {
+      console.error('failure to upload', error);
+    }
+  }
+</script>
+
+<body>
+  <div style="display: flex; flex-direction: column;">
+    <input type="file" id="fileinput" />
+    <div>
+      <img id="processed-image" alt="processed-image" />
+    </div>
+  </div>
+</body>
+
+</html>

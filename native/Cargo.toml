@@ -1,0 +1,19 @@
+[package]
+name = "image-converter"
+version = "0.1.0"
+authors = ["Taariq Mullins <tjma2001@gmail.com>"]
+license = "MIT"
+build = "build.rs"
+edition = "2018"
+exclude = ["artifacts.json", "index.node"]
+
+[lib]
+name = "image_converter"
+crate-type = ["cdylib"]
+
+[build-dependencies]
+neon-build = "0.4.0"
+
+[dependencies]
+image-convert = "0.9.10"
+neon = "0.4.0"
