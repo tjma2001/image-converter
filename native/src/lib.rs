@@ -5,13 +5,12 @@ use neon::prelude::*;
 use neon::register_module;
 use std::path::Path;
 
-fn hello(mut cx: FunctionContext) -> JsResult<JsString> {
+fn convert(mut cx: FunctionContext) -> JsResult<JsString> {
     let path = cx.argument::<JsString>(0)?.value();
     let name = format!("{}{}", cx.argument::<JsString>(1)?.value(), ".webp");
+    let width = cx.argument::<JsNumber>(2)?.value() as u16;
 
     let output_path = format!("{}{}", "./output/", name);
-
-    println!("path is:{} name:{} output_path:{}", path, name, output_path);
 
     let source_image_path = Path::new(&path);
     let output_image_path = Path::new(&output_path);
@@ -20,7 +19,11 @@ fn hello(mut cx: FunctionContext) -> JsResult<JsString> {
     let mut output = ImageResource::from_path(output_image_path);
 
     let mut config = WEBPConfig::new();
-    config.width = 800;
+
+    if width > 0 {
+        config.width = width;
+    }
+
     config.quality = 100;
 
     to_webp(&mut output, &input, &config).unwrap();
@@ -28,4 +31,4 @@ fn hello(mut cx: FunctionContext) -> JsResult<JsString> {
     Ok(cx.string(name))
 }
 
-register_module!(mut cx, { cx.export_function("hello", hello) });
+register_module!(mut cx, { cx.export_function("convert", convert) });

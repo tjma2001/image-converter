@@ -3,3 +3,4 @@ native/target
 output/*
 tmp/*
 data/*
+index.node
